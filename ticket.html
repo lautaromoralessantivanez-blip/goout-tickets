@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GO OUT Tickets</title>
+
+<link rel="stylesheet" href="ticket.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyAylZxOlnM3W-j9hxoCTk-F9mH7IV1dwqo",
+
+authDomain:
+"tickets-goout.firebaseapp.com",
+
+projectId:
+"tickets-goout",
+
+storageBucket:
+"tickets-goout.firebasestorage.app",
+
+messagingSenderId:
+"355899813216",
+
+appId:
+"1:355899813216:web:778413246d815e8a59c205",
+
+measurementId:
+"G-X6PZ8QZ9PY"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+window.db =
+getFirestore(app);
+
+</script>
+
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+
+<div class="logo">
+
+<h1>GO OUT</h1>
+
+<p>
+Sistema de Tickets
+</p>
+
+</div>
+
+<button
+class="menu-btn active"
+data-page="ticket">
+
+Nuevo Ticket
+
+</button>
+
+<button
+class="menu-btn"
+data-page="movimientos">
+
+Movimientos
+
+</button>
+
+<button
+class="menu-btn"
+data-page="config">
+
+Configuración
+
+</button>
+
+<button
+class="menu-btn"
+data-page="estadisticas">
+
+Estadísticas
+
+</button>
+
+</div>
+
+<div class="contenido">
+
+<section
+id="ticket"
+class="pagina activa">
+
+<div class="contenedor-ticket">
+
+<div class="preview">
+
+<h2>
+Vista Previa
+</h2>
+
+<div
+id="ticketPreview"
+class="ticket-print">
+
+<div class="empresa">
+
+<h3 id="prevNombre">
+GO OUT
+</h3>
+
+<p id="prevDescripcion">
+Descripción empresa
+</p>
+
+<p id="prevCuit">
+CUIT
+</p>
+
+<p id="prevDireccion">
+Dirección
+</p>
+
+<p id="prevTelefono">
+Teléfono
+</p>
+
+</div>
+
+<hr>
+
+<div class="ticket-data">
+
+<p>
+COMPROBANTE INTERNO
+</p>
+
+<p id="prevNumero">
+N° 000001
+</p>
+
+<p id="prevFecha">
+00/00/0000 00:00
+</p>
+
+<hr>
+
+<p>
+Cliente:
+<span id="prevCliente">
+-
+</span>
+</p>
+
+<p>
+Concepto:
+<span id="prevConcepto">
+-
+</span>
+</p>
+
+<p>
+Método:
+<span id="prevMetodo">
+-
+</span>
+</p>
+
+<p>
+Total:
+<span id="prevTotal">
+$0
+</span>
+</p>
+
+</div>
+
+<hr>
+
+<p id="prevMensaje">
+Gracias por elegirnos
+</p>
+
+</div>
+
+</div>
+
+<div class="formulario">
+
+<h2>
+Guardar e Imprimir
+</h2>
+
+<label>
+Cliente *
+</label>
+
+<input
+type="text"
+id="cliente"
+required>
+
+<label>
+Concepto *
+</label>
+
+<input
+type="text"
+id="concepto"
+required>
+
+<label>
+Monto *
+</label>
+
+<input
+type="number"
+id="monto"
+required>
+
+<label>
+Método Pago
+</label>
+
+<select id="metodo">
+
+<option>
+Efectivo
+</option>
+
+<option>
+Mercado Pago
+</option>
+
+<option>
+Mixto
+</option>
+
+</select>
+
+<div id="mixtoBox">
+
+<label>
+Entrega en efectivo
+</label>
+
+<input
+type="number"
+id="efectivo">
+
+<label>
+Entrega por Mercado Pago
+</label>
+
+<input
+type="number"
+id="mercadopago">
+
+</div>
+
+<label>
+Observaciones
+</label>
+
+<textarea
+id="observaciones">
+</textarea>
+
+<button
+id="guardarImprimir">
+
+Guardar e Imprimir
+
+</button>
+
+</div>
+
+</div>
+
+</section><!-- MOVIMIENTOS -->
+
+<section
+id="movimientos"
+class="pagina">
+
+<h2>
+Movimientos
+</h2>
+
+<div
+id="listaMovimientos">
+
+</div>
+
+</section>
+
+<!-- CONFIGURACION -->
+
+<section
+id="config"
+class="pagina">
+
+<h2>
+Configuración
+</h2>
+<h3>Seguridad</h3>
+
+<label>Clave Administrador (6 dígitos)</label>
+
+<input
+type="password"
+id="claveAdmin"
+maxlength="6">
+
+<button id="guardarClave">
+Guardar / Cambiar Clave
+</button>
+<label>
+Nombre Empresa
+</label>
+
+<input id="empresaNombre">
+
+<label>
+Descripción
+</label>
+
+<input id="empresaDescripcion">
+
+<label>
+CUIT
+</label>
+
+<input id="empresaCuit">
+
+<label>
+Dirección
+</label>
+
+<input id="empresaDireccion">
+
+<label>
+Teléfono
+</label>
+
+<input id="empresaTelefono">
+
+<label>
+Mensaje Final
+</label>
+
+<input id="empresaMensaje">
+
+<label>
+Ancho Ticket
+</label>
+
+<select id="anchoTicket">
+
+<option value="58">
+58 mm
+</option>
+
+<option value="80" selected>
+80 mm
+</option>
+
+</select>
+
+<button
+id="guardarConfig">
+
+Guardar Configuración
+
+</button>
+
+</section>
+
+<!-- ESTADISTICAS -->
+
+<section
+id="estadisticas"
+class="pagina">
+
+<h2>
+Estadísticas
+</h2>
+<button id="descargarResumen">
+📄 Descargar Resumen
+</button>
+<div class="filtros-stats">
+
+<select id="filtroPeriodo">
+
+<option value="dia">Hoy</option>
+<option value="semana">Semana</option>
+<option value="mes">Mes</option>
+<option value="general" selected>General</option>
+
+</select>
+
+<select id="filtroMetodo">
+
+<option value="todos" selected>Todos</option>
+<option value="efectivo">Efectivo</option>
+<option value="mp">Mercado Pago</option>
+
+</select>
+
+</div>
+<div class="stats">
+
+<div class="stat">
+<h3>Total General</h3>
+<span id="totalGeneral">$0</span>
+</div>
+
+<div class="stat">
+<h3>Total Efectivo</h3>
+<span id="totalEfectivo">$0</span>
+</div>
+
+<div class="stat">
+<h3>Total Mercado Pago</h3>
+<span id="totalMP">$0</span>
+</div>
+
+<div class="stat">
+<h3>Cantidad Tickets</h3>
+<span id="cantidadTickets">0</span>
+</div>
+
+</div>
+
+<h3>Detalle de Movimientos Filtrados</h3>
+
+<div id="detalleEstadisticas"></div>
+</section>
+
+</div>
+
+</div>
+
+<script type="module" src="app.js"></script>
+
+</body>
+
+</html>
